@@ -194,7 +194,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_registration']
         <a href="view_services.php">📋 View Services</a>
         <a href="provider profile.php">👤 Profile</a>
         <a href="registered_services.php">✅ Registered Services</a>
-        <a href="inbox.php">📬 Inbox</a>
+        <a href="provider inbox.php">📬 Inbox</a>
         <a href="../logout.php">🚪 Logout</a>
     </div>
 

@@ -162,9 +162,9 @@ $registered_services = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <h2>Provider Panel</h2>
         <a href="provider dashboard.php">🏠 Dashboard</a>
         <a href="view_services.php">📋 View Services</a>
-        <a href="provider profile.php">📝 Edit Profile</a>
+        <a href="provider profile.php">👤 Profile</a>
         <a href="registered_services.php">✅ Registered Services</a>
-        <a href="inbox.php">📬 Inbox</a>
+        <a href="provider inbox.php">📬 Inbox</a>
         <a href="../logout.php">🚪 Logout</a>
     </div>
 
@@ -193,5 +193,8 @@ $registered_services = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 </body>
 </html>
+
+
+
 
 

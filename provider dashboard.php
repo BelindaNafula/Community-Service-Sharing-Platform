@@ -119,9 +119,9 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'provider') {
         <div class="sidebar">
             <h2>Provider Panel</h2>
             <a href="view_services.php">📋 View Services</a>
-            <a href="provider dashboard.php">👤 Profile</a>
+            <a href="provider profile.php">👤 Profile</a>
             <a href="registered_services.php">✅ Registered Services</a>
-            <a href="inbox.php">📬 Inbox</a>
+            <a href="provider inbox.php">📬 Inbox</a>
             <div class="logout">
                 <a href="../logout.php">🚪 Logout</a>
             </div>

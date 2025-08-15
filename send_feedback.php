@@ -111,18 +111,16 @@ $providers = $providerQuery->fetchAll(PDO::FETCH_ASSOC);
         .request-button { margin-top: 10px; padding: 8px 12px; background-color: #68063c; color: white; border: none; border-radius: 6px; cursor: pointer; }
         .request-button:hover { background-color: #4c042b; }
         .request-form { margin-top: 10px; display: none; }
-        .feedback-list { margin-top: 10px; display: none; background: #f8f8f8; padding: 10px; border-radius: 6px; }
-        .feedback-item { border-bottom: 1px solid #ddd; padding: 5px 0; }
-        .stars { color: gold; }
-        textarea, select { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #ccc; }
+        .request-form textarea { width: 100%; height: 70px; padding: 10px; border-radius: 6px; border: 1px solid #ccc; resize: vertical; }
         .success-message { color: green; font-weight: bold; margin-bottom: 15px; }
         .back-link { display: inline-block; margin-top: 20px; color: #68063c; text-decoration: none; font-weight: bold; }
         .back-link:hover { text-decoration: underline; }
+        select { padding: 5px; border-radius: 4px; }
     </style>
     <script>
         function toggleForm(id) {
-            const el = document.getElementById(id);
-            el.style.display = el.style.display === 'none' ? 'block' : 'none';
+            const form = document.getElementById(id);
+            form.style.display = form.style.display === 'none' ? 'block' : 'none';
         }
     </script>
 </head>
@@ -151,16 +149,6 @@ $providers = $providerQuery->fetchAll(PDO::FETCH_ASSOC);
             <?php if (!empty($success)) echo "<p class='success-message'>{$success}</p>"; ?>
             <?php if ($providers): ?>
                 <?php foreach ($providers as $index => $row): ?>
-                    <?php
-                    $feedbackStmt = $conn->prepare("
-                        SELECT rating, comment, created_at 
-                        FROM feedback 
-                        WHERE provider_id = ? 
-                        ORDER BY created_at DESC
-                    ");
-                    $feedbackStmt->execute([$row['id']]);
-                    $feedbackList = $feedbackStmt->fetchAll(PDO::FETCH_ASSOC);
-                    ?>
                     <div class="card">
                         <div class="provider-name">
                             <?php echo htmlspecialchars($row['first_name'] . ' ' . $row['second_name']); ?>
@@ -170,6 +158,7 @@ $providers = $providerQuery->fetchAll(PDO::FETCH_ASSOC);
                         <div class="info">📧 Email: <?php echo htmlspecialchars($row['email']); ?></div>
                         <div class="info">💼 Experience:<br> <?php echo nl2br(htmlspecialchars($row['experience'])); ?></div>
                         
+                        <!-- Request Service -->
                         <button class="request-button" onclick="toggleForm('request-<?php echo $index; ?>')">📩 Request Service</button>
                         <form class="request-form" id="request-<?php echo $index; ?>" method="POST">
                             <input type="hidden" name="provider_id" value="<?php echo $row['id']; ?>">
@@ -179,11 +168,12 @@ $providers = $providerQuery->fetchAll(PDO::FETCH_ASSOC);
                             <button type="submit" name="request_service" class="request-button">Send Request</button>
                         </form>
 
-                        <button class="request-button" onclick="toggleForm('feedbackform-<?php echo $index; ?>')">⭐ Leave Feedback</button>
-                        <form class="request-form" id="feedbackform-<?php echo $index; ?>" method="POST">
+                        <!-- Leave Feedback -->
+                        <button class="request-button" onclick="toggleForm('feedback-<?php echo $index; ?>')">⭐ Leave Feedback</button>
+                        <form class="request-form" id="feedback-<?php echo $index; ?>" method="POST">
                             <input type="hidden" name="provider_id" value="<?php echo $row['id']; ?>">
-                            <label>Rating:</label>
-                            <select name="rating" required>
+                            <label for="rating-<?php echo $index; ?>">Rating:</label>
+                            <select name="rating" id="rating-<?php echo $index; ?>" required>
                                 <option value="">-- Select --</option>
                                 <option value="5">⭐⭐⭐⭐⭐ (5)</option>
                                 <option value="4">⭐⭐⭐⭐ (4)</option>
@@ -192,25 +182,10 @@ $providers = $providerQuery->fetchAll(PDO::FETCH_ASSOC);
                                 <option value="1">⭐ (1)</option>
                             </select>
                             <br><br>
-                            <textarea name="comment" required placeholder="Write your feedback..."></textarea>
+                            <textarea name="comment" required placeholder="Write your feedback..." style="width:100%;height:70px;"></textarea>
                             <br><br>
                             <button type="submit" name="leave_feedback" class="request-button">Submit Feedback</button>
                         </form>
-
-                        <button class="request-button" onclick="toggleForm('feedbacklist-<?php echo $index; ?>')">💬 View Feedback</button>
-                        <div class="feedback-list" id="feedbacklist-<?php echo $index; ?>">
-                            <?php if ($feedbackList): ?>
-                                <?php foreach ($feedbackList as $fb): ?>
-                                    <div class="feedback-item">
-                                        <div class="stars"><?php echo str_repeat("⭐", $fb['rating']); ?></div>
-                                        <div><?php echo nl2br(htmlspecialchars($fb['comment'])); ?></div>
-                                        <small>🗓 <?php echo $fb['created_at']; ?></small>
-                                    </div>
-                                <?php endforeach; ?>
-                            <?php else: ?>
-                                <p>No feedback yet.</p>
-                            <?php endif; ?>
-                        </div>
                     </div>
                 <?php endforeach; ?>
             <?php else: ?>
@@ -221,35 +196,5 @@ $providers = $providerQuery->fetchAll(PDO::FETCH_ASSOC);
     </div>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

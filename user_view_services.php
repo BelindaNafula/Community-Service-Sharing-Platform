@@ -138,6 +138,7 @@ $services = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <a href="dashboard user.php">🏠 Dashboard</a>
             <a href="user_view_services.php">📋 View Services</a>
             <a href="user_profile.php">👤 Profile</a>
+            <a href="user_inbox.php">📬 Inbox</a>
             <div class="logout">
                 <a href="../logout.php">🚪 Logout</a>
             </div>

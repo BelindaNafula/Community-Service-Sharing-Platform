@@ -16,26 +16,26 @@ if ($role === 'user') {
     die("Invalid role selected.");
 }
 
-
 $stmt->execute([$username]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-// Check if user exists and password is correct
 if ($user && password_verify($password, $user['password'])) {
-    $_SESSION['user_id'] = $user['id'];
 
-    // Set username based on role
+    // Correct session mapping for each role
     if ($role === 'user') {
+        $_SESSION['user_id'] = $user['user_id'];
         $_SESSION['username'] = $user['username'];
     } elseif ($role === 'provider') {
+        $_SESSION['user_id'] = $user['id']; // FIX: store provider's primary key
         $_SESSION['username'] = $user['name'];
     } elseif ($role === 'admin') {
+        $_SESSION['user_id'] = $user['id'];
         $_SESSION['username'] = $user['username'];
     }
 
     $_SESSION['role'] = $role;
 
-    // Redirect to correct dashboard
+    // Redirect based on role
     if ($role === 'user') {
         header("Location: dashboard user.php");
     } elseif ($role === 'provider') {
@@ -48,4 +48,5 @@ if ($user && password_verify($password, $user['password'])) {
     echo "Invalid credentials.";
 }
 ?>
+
 
